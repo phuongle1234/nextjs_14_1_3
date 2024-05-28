@@ -2,10 +2,11 @@ import Head from "next/head";
 import Image from "next/image";
 import { Props } from "next/script";
 import { LoginHook } from "@/hooks/Login";
+import Link from "next/link";
 
 
 const Child = ({ ...props }: any) => {
-    console.log( props?.hooks );
+    //console.log( props?.hooks );
     
     return (
         <div className="main">
@@ -42,7 +43,7 @@ const Child = ({ ...props }: any) => {
                         </div>
                         <div className="signup-image">
                             <figure><img src="images/signup-image.jpg" alt="sing up image" /></figure>
-                            <a href="#" className="signup-image-link">I am already member</a>
+                            <Link href="/login" className="signup-image-link">Login</Link>
                         </div>
                     </div>
                 </div>
@@ -53,7 +54,7 @@ const Child = ({ ...props }: any) => {
 }
 
 export default function Home(props: Props) {
-    const hooks = LoginHook()
-    return (<Child {...props} hooks={hooks} />);
+    //const hooks = LoginHook()
+    return (<Child {...props} />);
 
 }

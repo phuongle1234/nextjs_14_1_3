@@ -30,7 +30,9 @@ export const FieldSlice = createSlice({
         state.formInfo = { ...data };
         state[filed] = fields;
     },
-
+    clearFrom : (state) => {
+      Object.assign(state, initialState)
+    },
     setFormData : (state, action) => {
         const { data, field } : any = action.payload;
         
@@ -69,4 +71,4 @@ export const FieldSlice = createSlice({
 
 export default FieldSlice;
 export const globalReducer = FieldSlice.reducer;
-export const { setFormData, setFromContruct } = FieldSlice.actions;
+export const { setFormData, setFromContruct, clearFrom } = FieldSlice.actions;

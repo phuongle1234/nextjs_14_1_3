@@ -9,3 +9,5 @@ class AuthModelView {
     }
 
 }
+
+export const Auth = new AuthModelView()

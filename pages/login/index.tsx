@@ -2,19 +2,16 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { LoginHook } from "@/hooks/Login";
-import { FiledContext } from "@/provide/field";
-import React, {useContext } from "react";
+import React from "react";
+
 
 
 const Child = ({ ...props }: any) => {
 
-    const { fromLogin, validate, setFormFiled } = props?.hooks || {}
+    const { fromLogin, validate, setFormFiled, handleSubmit } = props?.hooks || {}
     
     const isValidSubmit = ( validate?.email?.success && validate?.password?.success ) || false
-    
-    const hook = useContext(FiledContext)
-    console.log( hook );
-    
+        
     return (
         <div className="main">
         <Head>
@@ -31,7 +28,7 @@ const Child = ({ ...props }: any) => {
                         </div>
                         <div className="signin-form">
                             <h2 className="form-title">Sign up</h2>
-                            <form method="POST" className="register-form" id="login-form">
+                            <form className="register-form" id="login-form" onSubmit={handleSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="your_name"><i className="zmdi zmdi-account material-icons-name"></i></label>
                                     <input type="text" name="email" value={fromLogin?.email}  placeholder="Your Email" onChange={setFormFiled} />

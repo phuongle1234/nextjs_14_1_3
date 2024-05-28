@@ -24,7 +24,7 @@ export const store = () => {
 
     middleware: (getDefaultMiddleware) => {
       return getDefaultMiddleware()
-             //.concat(logger);
+             .concat(logger);
     },
   });
 };

@@ -1,10 +1,9 @@
-'use client'
+
 import React  from "react"; 
-import { setFormData, setFromContruct } from "@/store/fieldData";
+import { clearFrom, setFormData, setFromContruct } from "@/store/fieldData";
 import Router from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { Value } from "sass";
 
 
 type Props = {
@@ -12,24 +11,31 @@ type Props = {
 };
 
 const initialContext = {
-	check: {}
+	setFiled: ()=>{}, 
+	fields: {},
+	fromName: '', 
+	setFromName: ()=>{},
+	filedData: {},
+	dispatch: ()=>{},
+	setFormFiled: ()=>{},
+	setFromConturct: ()=>{},
+	resetFrom:()=>{},
 };
 
-export const FiledContext = React.createContext( initialContext ) as any;
+export const filedContext: any = React.createContext( initialContext );
 
 
-export default function FiledProvider({ children }: any) {
+export default function FiledProvide({ children }: any) {
 	
 	const dispatch = useDispatch()
 	
-	const [setFiled, fields]: any = React.useState({})
+	const [fields, setFiled ]: any = React.useState({})
 	const [fromName, setFromName]: any = React.useState<string>("")
-
+	
 	const filedData = useSelector( (stage:any) => stage?.filedData )
 
-	const setFromConturct = () => {
-		dispatch( setFromContruct({ data: fields, filed: fromName }) )
-	}
+	const setFromConturct = () => dispatch( setFromContruct({ data: fields, filed: fromName }) )
+	const resetFrom = () => dispatch( clearFrom() )
 
     const setFormFiled =  (event :any) => {
 
@@ -49,14 +55,18 @@ export default function FiledProvider({ children }: any) {
     }
 
 	return (
-		<FiledContext.Provider Value={{
-			setFiled, fields,
-			fromName, setFromName,
+		<filedContext.Provider value={{
+			setFiled, 
+			fields,
+			fromName, 
+			setFromName,
 			filedData,
 			dispatch,
-			setFormFiled
+			resetFrom,
+			setFormFiled,
+			setFromConturct
 		}}>
 			{children}
-		</FiledContext.Provider>
+		</filedContext.Provider >
 	)
 }

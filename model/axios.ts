@@ -32,7 +32,8 @@ class AxiosService {
     this.axiosInstance.interceptors.request.use(
       (config: any) => {
         const access_token = getCookie("access_token");
-        console.log( "start !" );
+        
+        this.dispath( setStage( { isLoading: true } ) )
         
         if (access_token) 
           config.headers!.Authorization = `Bearer ${access_token}`;
@@ -42,7 +43,7 @@ class AxiosService {
       (error) => {
         if (error.response.status === 401) {
           deleteCookie("access_token");
-          window.location.href = `//${window.location.host}/login`;
+          //window.location.href = `//${window.location.host}/login`;
         }
         return Promise.reject(error);
       }
@@ -52,10 +53,12 @@ class AxiosService {
         return response;
       },
       (error: AxiosError) => {
-        console.log( "end !", { error }  );
+        
+        this.dispath( setStage( { isLoading: false } ) )
+
         if (error.response?.status === 401) {
           deleteCookie("access_token");
-          window.location.href = `//${window.location.host}/login`;
+         // window.location.href = `//${window.location.host}/login`;
         }
         return Promise.reject(error);
       }
@@ -73,6 +76,7 @@ class AxiosService {
   ): Promise<IAxiosServiceResponse<T>> {
     try {
       const response: any = await this.axiosInstance.post<T>(url, data, config);
+      
       return { ... response.data };
 
     } catch (error) {
@@ -134,9 +138,11 @@ class AxiosService {
     
     if (error.response) 
     {
-      const data = error.response?.data || {}
-      this.dispath( setStage( { msg: { message: data?.mes, status: data?.code } } ) )
-      return { ...data, success: false };
+      let mes = error.response?.data?.mes || ""
+          mes = (typeof mes == "string" ) ? mes: "error by API !"
+      
+      this.dispath( setStage( { msg: { message: mes, status: error.response?.data?.code || 400 } } ) )
+      return { mes, success: false };
     }
       
     

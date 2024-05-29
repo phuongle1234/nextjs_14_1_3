@@ -103,7 +103,7 @@ h2 {
 
 .main {
   background: #f8f8f8;
-  padding: 150px 0
+  height: 100vh;
 }
 
 .clear {
@@ -119,10 +119,16 @@ body {
   font-family: Poppins
 }
 
+.sign-in{
+  height: 500px;
+  margin: auto;
+  padding-top: 40px;
+}
+
 .container {
-  width: 900px;
+  // height: 500px;
   background: #fff;
-  margin: 0 auto;
+  margin: auto;
   box-shadow: 0 15px 16.83px .17px rgba(0, 0, 0, .05);
   -moz-box-shadow: 0 15px 16.83px .17px rgba(0, 0, 0, .05);
   -webkit-box-shadow: 0 15px 16.83px .17px rgba(0, 0, 0, .05);
@@ -511,14 +517,14 @@ label.valid:after {
 
 @media screen and (max-width:1200px) {
   .container {
-    width: calc(100% - 30px);
-    max-width: 100%
+    width: calc(100wh - 800px) !important;
+    // max-width: 100%
   }
 }
 
 @media screen and (min-width:1024px) {
   .container {
-    max-width: 1200px
+    max-width: 1000px !important
   }
 }
 
@@ -615,18 +621,19 @@ input:disabled{
 }
 
 .alertCustom, .modalCustom{
-  margin-bottom: 0px !important
+  margin-bottom: 0px !important;
+  border-radius: 0% !important;
 }
 
 
-.loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
-}
+// .loader {
+//   border: 16px solid #f3f3f3; /* Light grey */
+//   border-top: 16px solid #3498db; /* Blue */
+//   border-radius: 50%;
+//   width: 120px;
+//   height: 120px;
+//   animation: spin 2s linear infinite;
+// }
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -635,5 +642,34 @@ input:disabled{
 
 .modalLoading{
   background: none !important;
-  border-color: none !important;
+  border: none !important;
+  .modal-body{
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 130px;
+  aspect-ratio: 1;
+  border: 15px solid #ddd;
+  border-radius: 50%;
+  position: relative;
+  transform: rotate(45deg);
+}
+.loader::before {
+  content: "";
+  position: absolute;
+  inset: -15px;
+  border-radius: 50%;
+  border: 15px solid #514b82;
+  animation: l18 2s infinite linear;
+}
+@keyframes l18 {
+    0%   {clip-path:polygon(50% 50%,0 0,0    0,0    0   ,0    0   ,0    0   )}
+    25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0   ,100% 0   ,100% 0   )}
+    50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+    75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0    100%,0    100%)}
+    100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0    100%,0    0   )}
 }

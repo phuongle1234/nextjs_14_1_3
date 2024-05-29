@@ -27,7 +27,7 @@ const Child = ({ ...props }: any) => {
                             <Link href="/register" className="signup-image-link" > Create new account </Link>
                         </div>
                         <div className="signin-form">
-                            <h2 className="form-title">Sign up</h2>
+                            <h2 className="form-title">Log In</h2>
                             <form className="register-form" id="login-form" onSubmit={handleSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="your_name"><i className="zmdi zmdi-account material-icons-name"></i></label>

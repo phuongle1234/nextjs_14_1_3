@@ -13,17 +13,8 @@ const Loading = (props : any) => {
     const { isLoading } = useSelector( (stage:any) => stage?.global )
 
 
-    //React.useEffect( () => {
-        
-    //     const timeOutMesg: any = setTimeout( () => dispatch( setStage( { msg: {} } ) ), 2000 )
-
-    //     return () => { clearTimeout( timeOutMesg ) }
-
-    // },[isShow])
-
-    //if(isShow)
-
-    return ( 
+    if(isLoading)
+     return ( 
         <Modal show={true} contentClassName="modalLoading" centered  >
             <Modal.Body>
                     <div className="loader"></div>
@@ -31,7 +22,7 @@ const Loading = (props : any) => {
         </Modal>
     )
 
-    //return(<></>)
+    return(<></>)
 }
 
 

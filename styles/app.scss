@@ -613,3 +613,27 @@ label.valid:after {
 input:disabled{
   background: #9e9e9e4f;
 }
+
+.alertCustom, .modalCustom{
+  margin-bottom: 0px !important
+}
+
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.modalLoading{
+  background: none !important;
+  border-color: none !important;
+}

@@ -5,15 +5,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { from } from "@/enum/form";
 import Joi from "Joi"
 import  { filedContext } from "@/provide/field";
-import { Auth } from "@/model/auth"
+import { AuthModelView } from "@/model/auth"
 import { promises } from "dns";
 
 export const LoginHook = () => {
     
-    const dispatch = useDispatch()
-    
-    const { setFiled, setFromName, setFromConturct, setFormFiled, filedData, fields, fromName, resetFrom  } = React.useContext(filedContext) as any
-   
+
+    const { setFiled, setFromName, setFromConturct, setFormFiled, filedData, fields, fromName, resetFrom, dispatch  } = React.useContext(filedContext) as any
+        
+    const Auth = new AuthModelView()
+          Auth.setDispath(dispatch)
 
     let fromFiled:  { [key: string] : any } = {
                                                 email: { val: "", type: 'text', isParam: true, Joi: `string.email|${ JSON.stringify( { minDomainSegments: 2, tlds: { allow: false   } } ) }.messages|${ JSON.stringify( from?.email ) }` },

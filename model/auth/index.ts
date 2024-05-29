@@ -1,13 +1,13 @@
 
-import axios from "axios";
+import axiosService from "../axios";
 
-class AuthModelView {
-    private prefix: any = "/auth"
+export class AuthModelView extends axiosService {
+    private prefix: any = "/auth/login"
 
     public login = async (param:any) => {
-        return axios.post(this.prefix, param )
+        return this.post(this.prefix, param )
     }
 
 }
 
-export const Auth = new AuthModelView()
+//export const AuthModelView

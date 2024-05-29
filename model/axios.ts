@@ -1,4 +1,5 @@
 import getConfig from "next/config";
+import { setStage } from "@/store/global";
 
 import axios, {
   AxiosInstance,
@@ -19,11 +20,11 @@ export interface IAxiosServiceResponse<T = any> {
 class AxiosService {
   // call axiosInstance
   private readonly axiosInstance: AxiosInstance;
+  private dispath: any = () =>{}
+
   constructor(baseURL?: string) {
-    this.axiosInstance = axios.create({
-      baseURL: baseURL || getConfig().publicRuntimeConfig.API_URL,
-      // withCredentials: true, // IMPORTANT: enable sending cookies and authorization headers CORS
-    });
+
+    this.axiosInstance = axios.create({ baseURL: baseURL || getConfig().publicRuntimeConfig.API_URL,});
     
     this.axiosInstance.defaults.timeout = getConfig().publicRuntimeConfig.REQUEST_TIMEOUT || 30000;
 
@@ -31,9 +32,11 @@ class AxiosService {
     this.axiosInstance.interceptors.request.use(
       (config: any) => {
         const access_token = getCookie("access_token");
-        if (access_token) {
+        console.log( "start !" );
+        
+        if (access_token) 
           config.headers!.Authorization = `Bearer ${access_token}`;
-        }
+        
         return config;
       },
       (error) => {
@@ -49,6 +52,7 @@ class AxiosService {
         return response;
       },
       (error: AxiosError) => {
+        console.log( "end !", { error }  );
         if (error.response?.status === 401) {
           deleteCookie("access_token");
           window.location.href = `//${window.location.host}/login`;
@@ -58,6 +62,10 @@ class AxiosService {
     );
   }
 
+  public setDispath = (dispath: any) => {
+    this.dispath = dispath
+  }
+
   async post<T = any, R = AxiosResponse<T>>(
     url: string,
     data?: any,
@@ -65,12 +73,8 @@ class AxiosService {
   ): Promise<IAxiosServiceResponse<T>> {
     try {
       const response: any = await this.axiosInstance.post<T>(url, data, config);
-      return {
-        data: response.data?.data,
-        success: response.data.success,
-        message: response.data?.message,
-        error: response.data?.error,
-      };
+      return { ... response.data };
+
     } catch (error) {
       return this.handleError(error);
     }
@@ -82,12 +86,7 @@ class AxiosService {
   ): Promise<IAxiosServiceResponse<T>> {
     try {
       const response: any = await this.axiosInstance.get(url, config);
-      return {
-        data: response.data?.data,
-        success: response.data.success,
-        message: response.data?.message,
-        error: response.data?.error,
-      };
+      return { ... response.data };
     } catch (error) {
       return this.handleError(error);
     }
@@ -100,12 +99,7 @@ class AxiosService {
   ): Promise<IAxiosServiceResponse<T>> {
     try {
       const response: any = await this.axiosInstance.patch(url, data, config);
-      return {
-        data: response.data?.data,
-        success: response.data.success,
-        message: response.data?.message,
-        error: response.data?.error,
-      };
+      return { ... response.data };
     } catch (error) {
       return this.handleError(error);
     }
@@ -118,12 +112,7 @@ class AxiosService {
   ): Promise<IAxiosServiceResponse<T>> {
     try {
       const response: any = await this.axiosInstance.put(url, data, config);
-      return {
-        data: response.data?.data,
-        success: response.data.success,
-        message: response.data?.message,
-        error: response.data?.error,
-      };
+      return { ... response.data };
     } catch (error) {
       return this.handleError(error);
     }
@@ -135,35 +124,33 @@ class AxiosService {
   ): Promise<IAxiosServiceResponse<T>> {
     try {
       const response: any = await this.axiosInstance.delete(url, config);
-      return {
-        data: response.data?.data,
-        success: response.data.success,
-        message: response.data?.message,
-      };
+      return { ... response.data };
     } catch (error) {
       return this.handleError(error);
     }
   }
 
-  private handleError<T>(error: any): IAxiosServiceResponse<T> {
+  private handleError<T>(error: any): any {
     
-    if (error.response) {
-      const message = "erorr page !";
-      return { data: null, success: false, message };
-    } 
+    if (error.response) 
+    {
+      const data = error.response?.data || {}
+      this.dispath( setStage( { msg: { message: data?.mes, status: data?.code } } ) )
+      return { ...data, success: false };
+    }
+      
     
     // ** this case time out
     if (error.request) 
-      return {
-        data: null,
-        success: false,
-        message: "erorr message !",
-      };
-    
-    return { data: null, success: false, message: "erorr message !", };
+    { 
+      this.dispath( setStage( { msg: { message: "Request by timeout !", status: 400 } } ) )
+      return { code: 200, success: false };
+    }
+
+    return { code: 200, success: false };
    
   }
 }
 
-const axiosService = new AxiosService();
-export default axiosService;
+// const axiosService = new AxiosService();
+export default AxiosService;

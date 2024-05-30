@@ -5,8 +5,9 @@ import { AuthModelView } from './model/auth';
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
 
+
   // ** share data fetching
-  
+
   // const auth: any = new AuthModelView()
   // const res = await auth.login( { email: "groob@example8HH589.org", password: "Aa123456", } )
   
@@ -21,6 +22,7 @@ export async function middleware(request: NextRequest) {
 }
  
 // See "Matching Paths" below to learn more
-// export const config = {
-//   matcher: '/about/:path*',
-// }
+
+export const config = {
+  matcher: ['/((?!about|contact|sales|_next|images|login).*)'],
+}

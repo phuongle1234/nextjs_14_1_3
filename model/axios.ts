@@ -27,7 +27,7 @@ class AxiosService {
   
     this.axiosInstance = axios.create({ baseURL: baseURL || process?.env?.API_URL || getConfig()?.publicRuntimeConfig?.API_URL,});
     
-    this.axiosInstance.defaults.timeout = getConfig()?.publicRuntimeConfig?.REQUEST_TIMEOUT || 30000;
+    this.axiosInstance.defaults.timeout = process?.env?.REQUEST_TIMEOUT || getConfig()?.publicRuntimeConfig?.REQUEST_TIMEOUT || 30000;
 
     // Add a request interceptor
     this.axiosInstance.interceptors.request.use(

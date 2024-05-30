@@ -8,8 +8,9 @@ import React from "react";
 
 const Child = ({ ...props }: any) => {
 
-    const { fromLogin, validate, setFormFiled, handleSubmit } = props?.hooks || {}
+    // console.log( { auth: props?.auth  } );
     
+    const { fromLogin, validate, setFormFiled, handleSubmit } = props?.hooks || {}
     const isValidSubmit = ( validate?.email?.success && validate?.password?.success ) || false
         
     return (
@@ -66,6 +67,13 @@ const Child = ({ ...props }: any) => {
     )
 }
 
+// export const getServerSideProps = async (context: any) => {
+//     const { req} = context
+//     const auth =  JSON.parse( req?.headers['auth-ct5'] as string )
+//     return { props: { auth } }
+//   };
+
+  
 export default function Login(props: any) {
     return ( <Child {...props} hooks={ LoginHook() } /> );
 

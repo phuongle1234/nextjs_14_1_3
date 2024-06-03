@@ -21,18 +21,19 @@ class AxiosService {
   // call axiosInstance
   private readonly axiosInstance: AxiosInstance;
   private dispath: any = () =>{}
+  private baseURL: string = ""
 
-  constructor(baseURL?: string) {
+  constructor(res: any = {}) {
     
   
-    this.axiosInstance = axios.create({ baseURL: baseURL || process?.env?.API_URL || getConfig()?.publicRuntimeConfig?.API_URL,});
+    this.axiosInstance = axios.create({ baseURL: this?.baseURL || process?.env?.API_URL || getConfig()?.publicRuntimeConfig?.API_URL,});
     
     this.axiosInstance.defaults.timeout = process?.env?.REQUEST_TIMEOUT || getConfig()?.publicRuntimeConfig?.REQUEST_TIMEOUT || 30000;
-
+    
     // Add a request interceptor
     this.axiosInstance.interceptors.request.use(
       (config: any) => {
-        const access_token = getCookie("access_token");
+        const access_token = res?.token || getCookie("access_token");
         
         this.dispath( setStage( { isLoading: true } ) )
         

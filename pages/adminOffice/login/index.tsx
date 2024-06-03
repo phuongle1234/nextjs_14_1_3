@@ -71,10 +71,9 @@ const Child = ({ ...props }: any) => {
 //     const { req} = context
 //     const auth =  JSON.parse( req?.headers['auth-ct5'] as string )
 //     return { props: { auth } }
-//   };
+// };
 
   
 export default function Login(props: any) {
     return ( <Child {...props} hooks={ LoginHook() } /> );
-
 }

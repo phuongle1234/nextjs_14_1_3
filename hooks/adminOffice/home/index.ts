@@ -51,7 +51,7 @@ export const HomeAdminHook = () => {
         return () => {
 
             socket.off("prodcuts");
-            
+
             setFiled({})
             setFromName("")
         }
@@ -80,14 +80,14 @@ export const HomeAdminHook = () => {
             const res: any = await Auth.login(param)
             
             setCookie( "access_token", res?.token )
-            setCookie( "auth_ct5", cryptoAES.parse( { email: res?.email, id: res?.id } ) )
+            // setCookie( "auth_ct5", cryptoAES.parse( { email: res?.email, id: res?.id } ) )
             
             return router.push("/adminOffice")
 
         } catch (error) {
             console.log( { error } );
             deleteCookie("access_token")
-            deleteCookie("auth_ct5")
+            // deleteCookie("auth_ct5")
         }
       
         

@@ -8,7 +8,7 @@ import Error from "@/resources/component/error";
 import Loading from "@/resources/component/loading";
 
 export default function App({ Component, pageProps }: AppProps) {  
-  
+
   return (
             <StoreProvider>
               <FiledProvide>

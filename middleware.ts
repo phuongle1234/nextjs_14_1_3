@@ -8,34 +8,45 @@ export async function middleware(request: NextRequest) {
   if (!request.nextUrl.pathname.startsWith('/adminOffice')) 
     return NextResponse.next()
 
+  const token = request?.cookies?.get('access_token')
   
-  if( !request?.cookies?.has('access_token') )    
-    return NextResponse.redirect( new URL("/adminOffice/login", request.url ) )
-  
-    
-  // ** share data fetching
+  if (request.nextUrl.pathname.startsWith('/adminOffice/login')) 
+    return token ? NextResponse.redirect( new URL("/adminOffice", request.url ) ) : NextResponse.next()
 
-  // const auth: any = new AuthModelView()
-  // const res = await auth.login( { email: "groob@example8HH589.org", password: "Aa123456", } )
   
-  // const requestHeaders = new Headers(request.headers)
-  //       requestHeaders.set('auth-CT5', JSON.stringify({ ...res }  ) )
- 
-  // const response = NextResponse.next({ request: { headers: requestHeaders, }, })
- 
-  // return response
+  if( !token )    
+    return NextResponse.redirect( new URL("/adminOffice/login", request.url ) )
+
+  try {
+      
+  // ** share data fetching
     
-  //return NextResponse.next()
+    const auth: any = new AuthModelView( { token: token?.value } )
+    const res = await auth.me( )
+    
+    const requestHeaders = new Headers(request.headers)
+          requestHeaders.set('auth-CT5', JSON.stringify({ ...( res?.users || {} ) }  ) )
+  
+    
+    return NextResponse.next({ request: { headers: requestHeaders, }, })
+    
+  
+  } catch (error) {
+    console.log( { error } );
+    return NextResponse.redirect( new URL("/adminOffice/login", request.url ) )
+  }
+
 }
  
 // See "Matching Paths" below to learn more
 // '/adminOffice/((?!about|contact|sales|_next|images|login).*)'
 // '/adminOffice/:path*', 
+
 export const config = {
   matcher: [
             // '/adminOffice/:path*',
-            '/((?!api|_next/static|images|_next/image|favicon.ico|adminOffice/images|adminOffice/login).*)',
+            '/((?!api|_next/static|images|_next/image|favicon.ico|adminOffice/images).*)',
            ],
 }
 
-// '/((?!api|_next/static|_next/image|favicon.ico).*)',
+//|adminOffice/login

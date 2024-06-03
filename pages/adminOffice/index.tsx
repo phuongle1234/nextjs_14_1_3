@@ -13,7 +13,6 @@ const Child = ({ ...props }: any) => {
     
     const { fromLogin, validate, setFormFiled, handleSubmit, socket } = hooks || {}
     const isValidSubmit = ( validate?.email?.success && validate?.password?.success ) || false
-    console.log( { auth } );
     
     return (
         <div className="main">

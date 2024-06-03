@@ -4,11 +4,16 @@ import { clearFrom, setFormData, setFromContruct } from "@/store/fieldData";
 import Router from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import { io } from "socket.io-client";
+import getConfig from "next/config";
 
 
 type Props = {
 	children: React.ReactNode;
 };
+
+const { publicRuntimeConfig } = getConfig();
+	const { SOCKET_URL } = publicRuntimeConfig;
 
 const initialContext = {
 	setFiled: ()=>{}, 
@@ -20,6 +25,7 @@ const initialContext = {
 	setFormFiled: ()=>{},
 	setFromConturct: ()=>{},
 	resetFrom:()=>{},
+	socket: io(SOCKET_URL ?? "http://localhost:4500")
 };
 
 export const filedContext: any = React.createContext( initialContext );
@@ -27,6 +33,7 @@ export const filedContext: any = React.createContext( initialContext );
 
 export default function FiledProvide({ children }: any) {
 	
+
 	const dispatch = useDispatch()
 	
 	const [fields, setFiled ]: any = React.useState({})
@@ -61,6 +68,7 @@ export default function FiledProvide({ children }: any) {
 			fromName, 
 			setFromName,
 			filedData,
+			socket: initialContext?.socket,
 			dispatch,
 			resetFrom,
 			setFormFiled,

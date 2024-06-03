@@ -12,10 +12,10 @@ import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { channel } from "diagnostics_channel";
 
-export const LoginHook = () => {
+export const HomeAdminHook = () => {
     
 
-    const { setFiled, setFromName, setFromConturct, setFormFiled, filedData, fields, fromName, resetFrom, dispatch  } = React.useContext(filedContext) as any
+    const { setFiled, setFromName, setFromConturct, setFormFiled, filedData, fields, fromName, resetFrom, dispatch, socket  } = React.useContext(filedContext) as any
         
     const Auth = new AuthModelView()
           Auth.setDispath(dispatch)
@@ -33,15 +33,25 @@ export const LoginHook = () => {
     
     // authen soket
     // getCookie("access_token")                               
-   
+    
+    
 
+    
     React.useEffect( () =>{
         
+        socket.emit("authenticate", getCookie("access_token") , (data: any) => { console.log( { data } ); });
 
+        socket.on("prodcuts", (e:any)=> {
+            console.log( { e, channel: "prodcuts" } );
+        })
+        
         setFiled(fromFiled),
         setFromName("fromLogin")        
 
         return () => {
+
+            socket.off("prodcuts");
+            
             setFiled({})
             setFromName("")
         }
@@ -85,5 +95,5 @@ export const LoginHook = () => {
     
 
     
-    return { fromLogin, formInfo, validate, setFormFiled, handleSubmit }
+    return { fromLogin, formInfo, validate, setFormFiled }
 }

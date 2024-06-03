@@ -50,7 +50,8 @@ class AxiosService {
       }
     );
     this.axiosInstance.interceptors.response.use(
-      (response: AxiosResponse) => {
+      (response: AxiosResponse) => {        
+        this.dispath( setStage( { isLoading: false } ) )
         return response;
       },
       (error: AxiosError) => {
@@ -143,6 +144,7 @@ class AxiosService {
           mes = (typeof mes == "string" ) ? mes: "error by API !"
       
       this.dispath( setStage( { msg: { message: mes, status: error.response?.data?.code || 400 } } ) )
+      throw (mes)
       return { mes, success: false };
     }
       
@@ -151,9 +153,11 @@ class AxiosService {
     if (error.request) 
     { 
       this.dispath( setStage( { msg: { message: "Request by timeout !", status: 400 } } ) )
+      throw ( "Request by timeout !")
       return { code: 200, success: false };
     }
 
+    throw ( "error by API !")
     return { code: 200, success: false };
    
   }

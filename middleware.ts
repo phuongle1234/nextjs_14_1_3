@@ -5,7 +5,14 @@ import { AuthModelView } from './model/auth';
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
 
+  if (!request.nextUrl.pathname.startsWith('/adminOffice')) 
+    return NextResponse.next()
 
+  
+  if( !request?.cookies?.has('access_token') )    
+    return NextResponse.redirect( new URL("/adminOffice/login", request.url ) )
+  
+    
   // ** share data fetching
 
   // const auth: any = new AuthModelView()
@@ -18,11 +25,17 @@ export async function middleware(request: NextRequest) {
  
   // return response
     
-  return NextResponse.next()
+  //return NextResponse.next()
 }
  
 // See "Matching Paths" below to learn more
-
+// '/adminOffice/((?!about|contact|sales|_next|images|login).*)'
+// '/adminOffice/:path*', 
 export const config = {
-  matcher: ['/((?!about|contact|sales|_next|images|login).*)'],
+  matcher: [
+            // '/adminOffice/:path*',
+            '/((?!api|_next/static|images|_next/image|favicon.ico|adminOffice/images|adminOffice/login).*)',
+           ],
 }
+
+// '/((?!api|_next/static|_next/image|favicon.ico).*)',

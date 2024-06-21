@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function SilderBarAdmin( { children, ...props } : any ) {
     return (
         <aside className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
@@ -12,14 +14,24 @@ export default function SilderBarAdmin( { children, ...props } : any ) {
         <div className="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
             <ul className="navbar-nav">
                 <li className="nav-item">
-                    <a className="nav-link text-white " href="../pages/dashboard.html">
+                    <Link href={`/adminOffice/`} className="nav-link text-white active" >
                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i className="material-icons opacity-10">dashboard</i>
                         </div>
-                        <span className="nav-link-text ms-1">Dashboard</span>
-                    </a>
+                          <span className="nav-link-text ms-1">Home</span>
+                    </Link>
                 </li>
+                
                 <li className="nav-item">
+                    <Link href={`/adminOffice/catelories`} className="nav-link text-white" >
+                        <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i className="material-icons opacity-10">table_view</i>
+                        </div>
+                          <span className="nav-link-text ms-1">Catelories</span>
+                    </Link>
+                </li>
+
+                {/* <li className="nav-item">
                     <a className="nav-link text-white active bg-gradient-primary" href="../pages/tables.html">
                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i className="material-icons opacity-10">table_view</i>
@@ -85,13 +97,11 @@ export default function SilderBarAdmin( { children, ...props } : any ) {
                         </div>
                         <span className="nav-link-text ms-1">Sign Up</span>
                     </a>
-                </li>
+                </li> */}
             </ul>
         </div>
         <div className="sidenav-footer position-absolute w-100 bottom-0 ">
             <div className="mx-3">
-                <a className="btn btn-outline-primary mt-4 w-100" href="https://www.creative-tim.com/learning-lab/bootstrap/overview/material-dashboard?ref=sidebarfree" >Documentation</a>
-                <a className="btn bg-gradient-primary w-100" href="https://www.creative-tim.com/product/material-dashboard-pro?ref=sidebarfree" >Upgrade to pro</a>
             </div>
         </div>
     </aside>

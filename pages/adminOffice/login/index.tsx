@@ -9,7 +9,7 @@ import { SideProps } from "@/service/sideProps";
 
 const Child = ({ ...props }: any) => {
         
-    const { fromLogin, validate, setFormFiled, handleSubmit } = props?.hooks || {}
+    const { fromLogin, validate, setFormFiled, handleSubmit } = props?.hooks() || {}
     const isValidSubmit = ( validate?.email?.success && validate?.password?.success ) || false
         
     return (
@@ -65,6 +65,6 @@ export const getServerSideProps = async (context: any) => {
   
 export default function Login(props: any) {
     return (<LayoutAuthencation {...props} title={"Admin | Login "} >
-        <Child {...props} hooks={LoginHook()} />
+        <Child {...props} hooks={LoginHook} />
     </LayoutAuthencation>);
 }

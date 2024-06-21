@@ -13,8 +13,7 @@ import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { channel } from "diagnostics_channel";
 
 export const LoginHook = () => {
-    
-
+        
     const {
             setFiled, stage, hasOwnStore, storeInfo,
             setFromConturct, setFormFiled, filedData, fields, resetFrom, dispatch, ownStore, setOwnStore, router

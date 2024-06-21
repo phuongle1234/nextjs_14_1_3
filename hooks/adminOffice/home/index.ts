@@ -4,7 +4,7 @@ import Router from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { from } from "@/enum/form";
 import Joi from "Joi"
-import  { filedContext } from "@/provide/field";
+import { AccessContext } from "@/provide/access";
 import { AuthModelView } from "@/model/auth"
 import { promises } from "dns";
 import { cryptoAES } from "@/service/ensrip";
@@ -15,7 +15,7 @@ import { channel } from "diagnostics_channel";
 export const HomeAdminHook = () => {
     
 
-    const { setFiled, setFromName, setFromConturct, setFormFiled, filedData, fields, fromName, resetFrom, dispatch, socket  } = React.useContext(filedContext) as any
+    const { setFiled, setFromName, setFromConturct, setFormFiled, filedData, fields, fromName, resetFrom, dispatch, socket  } = React.useContext(AccessContext) as any
         
     const Auth = new AuthModelView()
           Auth.setDispath(dispatch)
@@ -60,14 +60,14 @@ export const HomeAdminHook = () => {
 
     const intContruct = ( Object.keys(fields).length >= 1 ) && (fromName != "")
 
-    React.useEffect( () =>{
+    // React.useEffect( () =>{
         
-        if(intContruct)
-            setFromConturct()
+    //     if(intContruct)
+    //         setFromConturct()
 
-        return () => { resetFrom() }
+    //     return () => { resetFrom() }
 
-    }, [intContruct] )
+    // }, [intContruct] )
 
     const handleSubmit = async (event: any) => {
         event.preventDefault()

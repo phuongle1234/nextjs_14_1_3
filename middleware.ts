@@ -9,31 +9,35 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
 
   const token = request?.cookies?.get('access_token')
-  
+   
   if (request.nextUrl.pathname.startsWith('/adminOffice/login')) 
-    return token ? NextResponse.redirect( new URL("/adminOffice", request.url ) ) : NextResponse.next()
+    return NextResponse.next()
 
-  
   if( !token )    
     return NextResponse.redirect( new URL("/adminOffice/login", request.url ) )
 
   try {
       
   // ** share data fetching
-    
+ 
+
     const auth: any = new AuthModelView( { token: token?.value } )
     const res = await auth.me( )
     
     const requestHeaders = new Headers(request.headers)
           requestHeaders.set('auth-CT5', JSON.stringify({ ...( res?.users || {} ) }  ) )
   
-    
-    return NextResponse.next({ request: { headers: requestHeaders, }, })
+    // if (request.nextUrl.pathname.startsWith('/adminOffice/login')) 
+    //     return token ? NextResponse.redirect( new URL("/adminOffice", request.url ) ) : NextResponse.next()
+
+    return NextResponse.next({ request: { headers: requestHeaders }, })
     
   
   } catch (error) {
-    console.log( { error } );
-    return NextResponse.redirect( new URL("/adminOffice/login", request.url ) )
+    console.log( {  error } );
+    const resError = NextResponse.redirect( new URL("/adminOffice/login", request.url ) )
+          resError.cookies.delete('access_token')    
+    return resError
   }
 
 }

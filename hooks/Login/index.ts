@@ -4,51 +4,55 @@ import Router from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { from } from "@/enum/form";
 import Joi from "Joi"
-import  { filedContext } from "@/provide/field";
-import { AuthModelView } from "@/model/auth"
+import  { AccessContext } from "@/provide/access";
+import  AuthModelView  from "@/model/auth"
 import { promises } from "dns";
 import { cryptoAES } from "@/service/ensrip";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
-import { useRouter } from "next/router";
+
 import { channel } from "diagnostics_channel";
 
 export const LoginHook = () => {
     
 
-    const { setFiled, setFromName, setFromConturct, setFormFiled, filedData, fields, fromName, resetFrom, dispatch  } = React.useContext(filedContext) as any
-        
-    const Auth = new AuthModelView()
-          Auth.setDispath(dispatch)
+    const {
+            setFiled, stage, hasOwnStore, storeInfo,
+            setFromConturct, setFormFiled, filedData, fields, resetFrom, dispatch, ownStore, setOwnStore, router
 
-    const router = useRouter()      
+          } = React.useContext(AccessContext) as any
+    
+    // define store
+    setOwnStore("AuthSlice")
+    
+    const Auth = AuthModelView
+          Auth.setDispath(dispatch)
+    
+    let localStore: any = {}
+
+    if( typeof window == "object" )
+    {
+        localStore = localStorage.getItem("auth")
+        localStore = localStore ? JSON.parse( localStore ) : {}
+    }
 
     let fromFiled:  { [key: string] : any } = {
-                                                email: { val: "", type: 'text', isParam: true, Joi: `string.email|${ JSON.stringify( { minDomainSegments: 2, tlds: { allow: false   } } ) }.messages|${ JSON.stringify( from?.email ) }` },
-                                                password: { val: "", type: 'text', isParam: true, Joi: `string.min|5.required.messages|${ JSON.stringify( from?.password ) }`  },
-                                                remember: { val: false, type: 'boolean', Joi: "string.min|5.required"  }
+                                                email: { val: localStore?.email || "", type: 'text', Joi: Joi.string().email({ minDomainSegments: 2, tlds: { allow: false   } }).required() },
+                                                password: { val: "", type: 'text', Joi: Joi.string().min(5).required()  },
+                                                remember: { val: localStore?.remember || false, type: 'boolean' }
                                              };
 
-
-    const { fromLogin, formInfo, validate }: any = { ...filedData,  fromLogin: filedData?.fromLogin || {}  }
     
-    // authen soket
-    // getCookie("access_token")                               
-   
-
+    const {  fromLogin, formInfo, validate }: any = { ...stage, fromLogin: stage?.fields || {}, formInfo: stage?.fields || {}  }
+    const intContruct = ( Object.keys(fields).length >= 1 ) && hasOwnStore
+    
+    // init filed data 
     React.useEffect( () =>{
         
-
-        setFiled(fromFiled),
-        setFromName("fromLogin")        
-
-        return () => {
-            setFiled({})
-            setFromName("")
-        }
+        setFiled(fromFiled)
+        return () => { setFiled({}), setOwnStore("") }
         
-    }, [] )
+    }, [  ] )
 
-    const intContruct = ( Object.keys(fields).length >= 1 ) && (fromName != "")
 
     React.useEffect( () =>{
         
@@ -68,16 +72,21 @@ export const LoginHook = () => {
             delete param?.remember
             
             const res: any = await Auth.login(param)
-            
             setCookie( "access_token", res?.token )
-            //setCookie( "auth_ct5", cryptoAES.parse( { email: res?.email, id: res?.id } ) )
+
+            delete res.token
+
+            if( fromLogin?.remember )
+             localStorage.setItem( "auth", JSON.stringify( { ...res, remember: param?.remembe } ) );
+            
+             
+            dispatch( storeInfo?.module?.setAttributes(res) )
             
             return router.push("/adminOffice")
 
         } catch (error) {
             console.log( { error } );
             deleteCookie("access_token")
-            //deleteCookie("auth_ct5")
         }
       
         

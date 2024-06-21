@@ -19,4 +19,4 @@ export class AuthModelView extends axiosService {
 
 }
 
-//export const AuthModelView
+export default new AuthModelView()

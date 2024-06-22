@@ -7,7 +7,7 @@ import "@/app/css/nucleo-svg.css"
 
 import type { AppProps } from "next/app";
 import { StoreProvider } from "@/resources/provider/StoreProvider";
-import FiledProvide from "@/provide/access";
+import AccessProvide from "@/provide/access";
 import Error from "@/resources/component/error";
 import Loading from "@/resources/component/loading";
 
@@ -15,11 +15,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
             <StoreProvider>
-              <FiledProvide>
+              <AccessProvide>
                   <Error />
                   <Loading />
                   <Component {...pageProps} />
-              </FiledProvide>
+              </AccessProvide>
             </StoreProvider>
         );
 }

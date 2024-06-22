@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
   if (!request.nextUrl.pathname.startsWith('/adminOffice')) 
     return NextResponse.next()
 
-  const token = request?.cookies?.get('access_token')
+  const token: any = request?.cookies?.get('access_token')
    
   if (request.nextUrl.pathname.startsWith('/adminOffice/login')) 
     return NextResponse.next()

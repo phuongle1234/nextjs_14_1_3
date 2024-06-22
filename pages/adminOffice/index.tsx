@@ -410,9 +410,9 @@ const Child = ({ ...props }: any) => {
     )
 }
 
-export const getServerSideProps = SideProps;
-
 
 export default function Login(props: any) {
     return (<LayoutAdmin {...props} title="Admin | Home" ><Child {...props} /></LayoutAdmin>);
 }
+
+export const getServerSideProps = SideProps;

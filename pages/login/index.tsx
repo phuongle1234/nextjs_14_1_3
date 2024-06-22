@@ -1,16 +1,14 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { LoginHook } from "@/hooks/Login";
+import { AuthencationHook } from "@/hooks/Login";
 import React from "react";
 
 
 
 const Child = ({ ...props }: any) => {
-
-    // console.log( { auth: props?.auth  } );
-    
-    const { fromLogin, validate, setFormFiled, handleSubmit } = props?.hooks || {}
+ 
+    const { fromLogin, validate, setFormFiled, handleSubmit } = props?.hooks() || {}
     const isValidSubmit = ( validate?.email?.success && validate?.password?.success ) || false
         
     return (
@@ -75,6 +73,6 @@ const Child = ({ ...props }: any) => {
 
   
 export default function Login(props: any) {
-    return ( <Child {...props} hooks={ LoginHook() } /> );
+    return ( <Child {...props} hooks={ AuthencationHook } /> );
 
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 export default function SilderBarAdmin( { children, ...props } : any ) {
+    
     return (
         <aside className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
         <div className="sidenav-header">
@@ -14,7 +15,7 @@ export default function SilderBarAdmin( { children, ...props } : any ) {
         <div className="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
             <ul className="navbar-nav">
                 <li className="nav-item">
-                    <Link href={`/adminOffice/`} className="nav-link text-white active" >
+                    <Link href={`/adminOffice/`} className={`nav-link text-white ${props?.prefix == 'home' && 'active' } `} >
                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i className="material-icons opacity-10">dashboard</i>
                         </div>
@@ -23,7 +24,7 @@ export default function SilderBarAdmin( { children, ...props } : any ) {
                 </li>
                 
                 <li className="nav-item">
-                    <Link href={`/adminOffice/catelories`} className="nav-link text-white" >
+                    <Link href={`/adminOffice/catelories`} className={`nav-link text-white ${props?.prefix == 'catelories' && 'active' } `} >
                         <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i className="material-icons opacity-10">table_view</i>
                         </div>

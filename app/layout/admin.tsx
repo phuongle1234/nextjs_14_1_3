@@ -1,8 +1,14 @@
 import Head from "next/head"
 import HeaderAdmin from "./header/admin"
 import SilderBarAdmin from "./sidebar/admin"
+import { AccessContext } from "@/provide/access"
+import React from "react"
 
 export default function LayoutAdmin({ children, ...props }: any) {
+
+    const prefix = ( props?.title as string).replace("Admin | ", "").toLowerCase()
+    props = { ...props, prefix }
+
     return (
         <>
             <Head>

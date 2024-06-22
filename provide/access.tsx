@@ -28,7 +28,7 @@ const initialContext = {
 	setFormFiled: () => { },
 	setFromConturct: () => { },
 	resetFrom: () => { },
-	socket: io(SOCKET_URL ?? "http://localhost:4500")
+	socket:  () => { } //io(SOCKET_URL ?? "http://localhost:4500")
 };
 
 export const AccessContext: any = React.createContext(initialContext);
@@ -48,12 +48,23 @@ export default function AccessProvide({ children }: any) {
 
 	let storeInfo: any = { name: "", module: {} }
 
-	const hasOwnStore: boolean = archive.hasOwnProperty(ownStore as string)
+	const hasOwnStore: boolean =  ownStore ? archive.hasOwnProperty(ownStore as string) : false
 
 	if (hasOwnStore) {
 		const module: any = archive
 		storeInfo = { name: ownStore.replace(/Slice/g, "").toLowerCase(), module: module[ownStore as string]?.actions }
 	}
+
+	const intContruct = ( Object.keys(fields).length >= 1 ) && hasOwnStore
+	
+    React.useEffect( () =>{
+        
+        if(intContruct)
+            setFromConturct()
+
+        return () => { resetFrom() }
+
+    }, [intContruct] )
 
 	const stage = useSelector((stage: any) => (stage[storeInfo?.name as string]))
 

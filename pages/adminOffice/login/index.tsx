@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { LoginHook } from "@/hooks/Login";
+import { AuthencationHook } from "@/hooks/Login";
 import React from "react";
 import LayoutAuthencation from "@/app/layout/authencation";
 import { SideProps } from "@/service/sideProps";
@@ -65,6 +65,6 @@ export const getServerSideProps = async (context: any) => {
   
 export default function Login(props: any) {
     return (<LayoutAuthencation {...props} title={"Admin | Login "} >
-        <Child {...props} hooks={LoginHook} />
+        <Child {...props} hooks={AuthencationHook} />
     </LayoutAuthencation>);
 }

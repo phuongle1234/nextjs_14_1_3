@@ -12,11 +12,13 @@ import { deleteCookie, getCookie, setCookie } from "cookies-next";
 
 import { channel } from "diagnostics_channel";
 
-export const LoginHook = () => {
-        
+export const AuthencationHook = () => {
+    
+
     const {
             setFiled, stage, hasOwnStore, storeInfo,
-            setFromConturct, setFormFiled, filedData, fields, resetFrom, dispatch, ownStore, setOwnStore, router
+            setFromConturct, setFormFiled, filedData, fields, 
+            resetFrom, dispatch, ownStore, setOwnStore, router
 
           } = React.useContext(AccessContext) as any
     
@@ -41,8 +43,7 @@ export const LoginHook = () => {
                                              };
 
     
-    const {  fromLogin, formInfo, validate }: any = { ...stage, fromLogin: stage?.fields || {}, formInfo: stage?.fields || {}  }
-    const intContruct = ( Object.keys(fields).length >= 1 ) && hasOwnStore
+    const {  fromLogin, formInfo, validate, attributes }: any = { ...stage, fromLogin: stage?.fields || {}, formInfo: stage?.fields || {}  }
     
     // init filed data 
     React.useEffect( () =>{
@@ -50,17 +51,7 @@ export const LoginHook = () => {
         setFiled(fromFiled)
         return () => { setFiled({}), setOwnStore("") }
         
-    }, [  ] )
-
-
-    React.useEffect( () =>{
-        
-        if(intContruct)
-            setFromConturct()
-
-        return () => { resetFrom() }
-
-    }, [intContruct] )
+    }, [] )
 
     const handleSubmit = async (event: any) => {
         event.preventDefault()
@@ -93,5 +84,5 @@ export const LoginHook = () => {
     
 
     
-    return { fromLogin, formInfo, validate, setFormFiled, handleSubmit }
+    return { fromLogin, formInfo, validate, setFormFiled, attributes, handleSubmit }
 }

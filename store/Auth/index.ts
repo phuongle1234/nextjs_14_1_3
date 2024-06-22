@@ -36,7 +36,7 @@ const reducers: any = {
     }
 }
 
-export const AuthSlice = createSlice({
+export const AuthSlice: any = createSlice({
   name: "auth",
   initialState,
   reducers,
@@ -45,5 +45,5 @@ export const AuthSlice = createSlice({
 
 export default AuthSlice;
 
-//export const globalReducer = globalSlice.reducer;
-// export const { ...reducers } = globalSlice.actions;
+// export const globalAuthSliceReducer = AuthSlice.reducer;
+export const { setAttributes } = AuthSlice.actions;

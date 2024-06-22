@@ -7,7 +7,7 @@ const LayoutAuthencation = ({ children, ...props }: any) => {
     return (
         <>
 
-            <Script type="text/javascript" dangerouslySetInnerHTML={{ __html }} ></Script>
+            <Script id="gtm-script" type="text/javascript" dangerouslySetInnerHTML={{ __html }} ></Script>
 
             <Head>
                 <title>{ props?.title || "Admin | Login" }</title>

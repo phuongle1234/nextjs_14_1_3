@@ -5,13 +5,10 @@ import { HomeAdminHook } from "@/hooks/adminOffice/home";
 import React from "react";
 import { SideProps } from "@/service/sideProps";
 import LayoutAdmin from "@/app/layout/admin";
+import { AccessContext } from "@/provide/access";
 
 const Child = ({ ...props }: any) => {
 
-    const { auth, hooks }: any = props
-
-    // const { fromLogin, validate, setFormFiled, handleSubmit, socket } = hooks || {}
-    // const isValidSubmit = (validate?.email?.success && validate?.password?.success) || false
 
     return (
         <>

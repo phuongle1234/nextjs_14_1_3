@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
             <StoreProvider>
-              <AccessProvide>
+              <AccessProvide {...pageProps}>
                   <Error />
                   <Loading />
                   <Component {...pageProps} />

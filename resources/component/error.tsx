@@ -30,7 +30,7 @@ const Error = (props : any) => {
     if(isShow)
     return ( 
         <Modal show={true}  >
-            <Modal.Body bsPrefix="modalCustom"><Alert className="alertCustom" transition={true} key={variant} variant={variant}>{ msg?.message }</Alert></Modal.Body>
+            <Modal.Body bsPrefix="modalCustom"><Alert className="alertCustom" transition={true} key={variant} variant={variant}>{ msg?.message || "" }</Alert></Modal.Body>
         </Modal>
     )
 

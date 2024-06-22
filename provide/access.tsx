@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { io } from "socket.io-client";
 import getConfig from "next/config";
+import { setAttributes as setAuth } from "@/store/Auth";
 import * as archive from "@/store/Kernel"
 import Joi from "Joi"
 
@@ -34,8 +35,10 @@ const initialContext = {
 export const AccessContext: any = React.createContext(initialContext);
 //AuthlSlice
 
-export default function AccessProvide({ children }: any) {
-
+export default function AccessProvide({ children, ...props }: any) {
+	
+	const authProps: any = props?.auth || {}
+	
 	const dispatch = useDispatch()
 
 	const router = useRouter()
@@ -66,7 +69,21 @@ export default function AccessProvide({ children }: any) {
 
     }, [intContruct] )
 
+	// listen change auth
+	React.useEffect( () =>{
+		
+		dispatch( setAuth( { ...authProps } ) )
+		
+
+        return () => { 
+			setAuth( { } )
+		 }
+
+    }, [ JSON.stringify(authProps) ] )
+
+
 	const stage = useSelector((stage: any) => (stage[storeInfo?.name as string]))
+	const auth = useSelector((stage: any) => stage?.auth?.attributes )
 
 	const joiValidate = ({ name, fields, value, checked = false }: any) => {
 		
@@ -124,18 +141,12 @@ export default function AccessProvide({ children }: any) {
 
 	return (
 		<AccessContext.Provider value={{
-			router,
-			storeInfo,
-			stage,
-			setFiled,
-			fields,
-			fromName,
-			setFromName,
-			filedData: {},
-			socket: initialContext?.socket,
+			auth, router, storeInfo, stage, setFiled, fields,
+			fromName, setFromName, filedData: {}, socket: initialContext?.socket,
 			hasOwnStore,
 			ownStore,
 			setOwnStore,
+			useSelector,
 			dispatch,
 			resetFrom,
 			setFormFiled,

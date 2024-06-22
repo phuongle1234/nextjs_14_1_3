@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Props } from "next/script";
-import { LoginHook } from "@/hooks/Login";
 import Link from "next/link";
 
 

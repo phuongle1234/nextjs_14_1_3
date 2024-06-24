@@ -1,4 +1,5 @@
 import Joi from "Joi"
+import internal from "stream"
 
 export interface Iform {
     [key : string]: any,
@@ -9,6 +10,23 @@ export interface Iform {
 export const initFormInfo: Iform = { 
   fields: {},
   validate: {}
+}
+
+export interface Iitems {
+  [key : string]: any,
+  items: [],
+  currentPage: internal | null,
+  lastPage: internal | null,
+  perPage: internal | null,
+  total: internal | null
+}
+
+export const intItems: Iitems = {
+  items: [],
+  currentPage: null,
+  lastPage: null,
+  perPage: null,
+  total: null
 }
 
 export const setFromContruct = (state: any, action: any ) => {

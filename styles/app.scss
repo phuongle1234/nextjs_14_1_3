@@ -43,6 +43,8 @@
   // border-radius: 0px !important;
   box-shadow: 1px 1px 1px #eee !important;
 }
-// label.form-label{
-//   z-index: 99;
-// }
+
+.scrollTable{
+  height: calc(100vh - 150px) !important;
+  overflow: scroll;
+}

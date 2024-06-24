@@ -23,7 +23,7 @@ export const AuthencationHook = () => {
           } = React.useContext(AccessContext) as any
     
     // define store
-    setOwnStore("AuthSlice")
+    setOwnStore("auth")
     
     const Auth = AuthModelView
           Auth.setDispath(dispatch)

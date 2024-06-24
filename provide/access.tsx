@@ -9,6 +9,8 @@ import getConfig from "next/config";
 import { setAttributes as setAuth } from "@/store/Auth";
 import * as archive from "@/store/Kernel"
 import Joi from "Joi"
+import { intItems, initFormInfo } from "@/traits/store";
+import debounce from 'debounce';
 
 type Props = {
 	children: React.ReactNode;
@@ -54,11 +56,16 @@ export default function AccessProvide({ children, ...props }: any) {
 	const hasOwnStore: boolean =  ownStore ? archive.hasOwnProperty(ownStore as string) : false
 
 	if (hasOwnStore) {
-		const module: any = archive
+		const module: any = archive		
 		storeInfo = { name: ownStore.replace(/Slice/g, "").toLowerCase(), module: module[ownStore as string]?.actions }
 	}
+	
+	const stage = useSelector((stage: any) => (stage[storeInfo?.name as string])) || { ...intItems, ...initFormInfo }
+	const auth = useSelector((stage: any) => stage?.auth?.attributes )
 
 	const intContruct = ( Object.keys(fields).length >= 1 ) && hasOwnStore
+	
+	const intAterContruct = Object.keys(stage?.fields).length ? JSON.stringify(stage?.fields) : false
 	
     React.useEffect( () =>{
         
@@ -82,8 +89,7 @@ export default function AccessProvide({ children, ...props }: any) {
     }, [ JSON.stringify(authProps) ] )
 
 
-	const stage = useSelector((stage: any) => (stage[storeInfo?.name as string]))
-	const auth = useSelector((stage: any) => stage?.auth?.attributes )
+
 
 	const joiValidate = ({ name, fields, value, checked = false }: any) => {
 		
@@ -128,7 +134,7 @@ export default function AccessProvide({ children, ...props }: any) {
 	}
 
 	const resetFrom = () => dispatch(clearFrom())
-
+	
 	const setFormFiled = (event: any) => {
 
 		const { name, value, checked } = event.target
@@ -138,19 +144,65 @@ export default function AccessProvide({ children, ...props }: any) {
 		dispatch(storeInfo?.module?.setFormData({ data, error }))
 
 	}
+	
+	// hasFetchLoadMore, setFetchLoadMore
+
+	const fetchs = async (modelView: any) => {
+
+        try {
+			
+            const res: any =  await modelView.read(stage?.fields)
+			let data: any =  { ...res.data }
+			
+
+			data['items'] = stage?.fields?.page > 1 ? [ ...stage?.items, ...data?.data ] 
+													: data?.data
+			
+			delete 	data?.data
+            dispatch( storeInfo.module?.changeStage( { ...data } ) )
+            
+        } catch (err: any) {
+            console.log( { err } );
+			
+        }
+	}
+	
+	const handleLoadMore = (e: any) => {
+        
+        const  { scrollTop, clientHeight, scrollHeight }  = e?.target;
+
+        const page = ( Number(stage?.currentPage) +1 as number);
+
+        let _percentage: number = Math.round( (scrollTop + clientHeight) / scrollHeight * 100);
+
+        if ( _percentage == 100 && ( Number(stage?.lastPage)>Number(stage?.currentPage) ) && (page != Number(fields.page) ) )
+        {            
+            dispatch( storeInfo?.module?.setFormData({  data: { page } }) )
+        }
+        
+    }
+
+	const handleChangeKeyWord: any = debounce( (e:any) => { 
+		dispatch( storeInfo?.module?.setFormData({  data: { page: 1 } }) )
+		setFormFiled(e) 
+	}, 800 )
 
 	return (
 		<AccessContext.Provider value={{
-			auth, router, storeInfo, stage, setFiled, fields,
-			fromName, setFromName, filedData: {}, socket: initialContext?.socket,
+			auth, router, storeInfo, 
+			stage : stage, setFiled, 
+			fields, intAterContruct,
+			handleChangeKeyWord,
+			fromName, setFromName, filedData: {}, 
+			socket: initialContext?.socket,
 			hasOwnStore,
 			ownStore,
 			setOwnStore,
 			useSelector,
-			dispatch,
+			dispatch, fetchs, handleLoadMore,
 			resetFrom,
 			setFormFiled,
-			setFromConturct
+			setFromConturct,
 		}}>
 			{children}
 		</AccessContext.Provider >

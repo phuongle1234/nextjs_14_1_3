@@ -3,6 +3,7 @@ import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import globalSlice from "./global";
 import FieldSlice from "./fieldData";
 import AuthSlice from "./Auth";
+import CategoriesSlice from "./Categories";
 import logger from "redux-logger";
 
 
@@ -14,7 +15,8 @@ export const store = () => {
     reducer: {
       [globalSlice.name]: globalSlice.reducer,
       //[FieldSlice.name]: FieldSlice.reducer,
-      [AuthSlice.name]: AuthSlice.reducer
+      [AuthSlice.name]: AuthSlice.reducer,
+      [CategoriesSlice.name]: CategoriesSlice.reducer,
     },
     // Adding the api middleware enables caching, invalidation, polling,
 

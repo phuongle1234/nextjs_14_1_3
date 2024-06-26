@@ -1,6 +1,6 @@
 
 import React from "react";
-import { clearFrom, setFormData, setFromContruct } from "@/store/fieldData";
+//import { clearFrom, setFormData, setFromContruct } from "@/store/fieldData";
 import Router from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
@@ -10,6 +10,7 @@ import { setAttributes as setAuth } from "@/store/Auth";
 import * as archive from "@/store/Kernel"
 import Joi from "Joi"
 import { intItems, initFormInfo } from "@/traits/store";
+import { initMutiFormInfo } from "@/traits/store/multi_rows";
 import debounce from 'debounce';
 
 type Props = {
@@ -25,7 +26,7 @@ const initialContext = {
 	setFiled: () => { },
 	fields: {},
 	fromName: '',
-	setFromName: () => { },
+	//setFromName: () => { },
 	filedData: {},
 	dispatch: () => { },
 	setFormFiled: () => { },
@@ -47,9 +48,9 @@ export default function AccessProvide({ children, ...props }: any) {
 
 	const [fields, setFiled]: any = React.useState({})
 
-	const [ownStore, setOwnStore]: any = React.useState<string>("")
+	const [ type, setType]: any = React.useState <'filter' | 'fileds' | 'mutiFields' > ( 'filter' )
 
-	const [fromName, setFromName]: any = React.useState<string>("")
+	const [ownStore, setOwnStore]: any = React.useState<string>("")
 
 	let storeInfo: any = { name: "", module: {} }
 
@@ -57,24 +58,19 @@ export default function AccessProvide({ children, ...props }: any) {
 
 	if (hasOwnStore) {
 		const module: any = archive		
-		storeInfo = { name: ownStore.replace(/Slice/g, "").toLowerCase(), module: module[ownStore as string]?.actions }
+		storeInfo = { name: ownStore, module: module[ownStore as string]?.actions }
 	}
 	
-	const stage = useSelector((stage: any) => (stage[storeInfo?.name as string])) || { ...intItems, ...initFormInfo }
+	const stage = useSelector((stage: any) => (stage[storeInfo?.name as string])) || { ...intItems, ...initFormInfo, ...initMutiFormInfo }
 	const auth = useSelector((stage: any) => stage?.auth?.attributes )
 
-	const intContruct = ( Object.keys(fields).length >= 1 ) && hasOwnStore
-	
-	const intAterContruct = Object.keys(stage?.fields).length ? JSON.stringify(stage?.fields) : false
-	
+
     React.useEffect( () =>{
+       		
+        if(Object.keys(fields).length >= 1)
+			setFromConturct()
         
-        if(intContruct)
-            setFromConturct()
-
-        return () => { resetFrom() }
-
-    }, [intContruct] )
+    }, [fields ] )
 
 	// listen change auth
 	React.useEffect( () =>{
@@ -100,7 +96,7 @@ export default function AccessProvide({ children, ...props }: any) {
 
 		let joi: any = {}
 		joi[name] = fields[name as string]?.Joi
-
+		
 		const error = hasJoi ? Joi.object().keys(joi).validate(data)?.error?.message : "";
 
 		joi[name] = { success: !error, error: error }
@@ -108,40 +104,63 @@ export default function AccessProvide({ children, ...props }: any) {
 		return { data, joi, error }
 	}
 
+	const mapValueFileds = Object.keys(fields).reduce((acc: any, cur: any) => {
+								let obj: any = {}
+								obj[cur as string] = fields[cur as string]?.val
+								return ({ ...acc, ...obj })
+							}, {})
+
 	const setFromConturct = async () => {
+		
+		if( !Object.keys( stage[type as string] ).length )
+		{			
+			dispatch(
+				storeInfo?.module?.setFromContruct({
+					data: mapValueFileds,
+					filed: type
+				})
+			)
 
-		// if(hasOwnStore) {}
+			const hasValidate = Object.keys(fields).filter((res: any) => (fields[res as string]?.val != ""))
 
-		dispatch(
-			storeInfo?.module?.setFromContruct({
-				data: Object.keys(fields).reduce((acc: any, cur: any) => {
-					let obj: any = {}
-					obj[cur as string] = fields[cur as string]?.val
-					return ({ ...acc, ...obj })
-				}, {}),
-				filed: fromName
-			})
-		)
-
-		const hasValidate = Object.keys(fields).filter((res: any) => (fields[res as string]?.val != ""))
-
-		if (hasValidate?.length) {
-			const validate: any = await hasValidate.reduce(async (cur: any, acc: any) => ({ ...(await cur), ...joiValidate({ name: acc, fields, value: fields[acc as string].val })?.joi }), Promise.resolve({}))
-			dispatch(storeInfo?.module?.changeStage({ validate }))
+			if (hasValidate?.length) {
+				const validate: any = await hasValidate.reduce(async (cur: any, acc: any) => ({ ...(await cur), ...joiValidate({ name: acc, fields, value: fields[acc as string].val })?.joi }), Promise.resolve({}))
+				dispatch(storeInfo?.module?.changeStage({ validate }))
+			}
 		}
-
 
 	}
 
-	const resetFrom = () => dispatch(clearFrom())
+	const resetFrom = () => {  
+		if( storeInfo?.name )
+			dispatch( storeInfo?.module?.clearFrom() ) 
+	}
 	
 	const setFormFiled = (event: any) => {
 
 		const { name, value, checked } = event.target
-		
 		const { data, error } = joiValidate({ fields, value, name, checked })
+		// 'filter' | 'fileds' | 'mutiFields
+		switch(type)
+		{
+			case "fileds":
+				dispatch(storeInfo?.module?.setFormData({ data, error, type })); break;
+			case "mutiFields":
+				const index = event.target.getAttribute("data-index")
+				let fils: any = [ ...stage?.mutiFields ]
+
+				const _thisRow = fils[index as number]
+				let erorr = { ... (_thisRow?.error || {} ) }
+					erorr[name as string] = error
+					fils[index as number] = {  ..._thisRow , ... data, error: erorr } 
+					
+					dispatch(storeInfo?.module?.changeStage({ mutiFields: fils }) ); 
+					break;
+				
+				break;
+		}
 		
-		dispatch(storeInfo?.module?.setFormData({ data, error }))
+		
 
 	}
 	
@@ -151,11 +170,11 @@ export default function AccessProvide({ children, ...props }: any) {
 
         try {
 			
-            const res: any =  await modelView.read(stage?.fields)
+            const res: any =  await modelView.read(stage?.filter)
 			let data: any =  { ...res.data }
 			
 
-			data['items'] = stage?.fields?.page > 1 ? [ ...stage?.items, ...data?.data ] 
+			data['items'] = stage?.filter?.page > 1 ? [ ...stage?.items, ...data?.data ] 
 													: data?.data
 			
 			delete 	data?.data
@@ -177,29 +196,43 @@ export default function AccessProvide({ children, ...props }: any) {
 
         if ( _percentage == 100 && ( Number(stage?.lastPage)>Number(stage?.currentPage) ) && (page != Number(fields.page) ) )
         {            
-            dispatch( storeInfo?.module?.setFormData({  data: { page } }) )
+            dispatch( storeInfo?.module?.setFormData({  data: { page }, type }) )
         }
         
     }
 
 	const handleChangeKeyWord: any = debounce( (e:any) => { 
-		dispatch( storeInfo?.module?.setFormData({  data: { page: 1 } }) )
+		dispatch( storeInfo?.module?.setFormData({  data: { page: 1 }, type }) )
 		setFormFiled(e) 
 	}, 800 )
+
+	const checkValid = stage?.mutiFields.find( (cur: any, acc: any) => {
+		
+						if(acc?.error?.length)
+							return true
+		
+						const check = acc?.error?.filter( (res:any) => res!= "" )
+						console.log( { check } );
+						
+						})
+
+	const handleAddRow = (e:any) => {	
+		console.log( { checkValid } );
+					
+		dispatch(storeInfo?.module?.changeStage({ mutiFields: [ ...stage?.mutiFields, { ...mapValueFileds } ] }) ); 
+    }
 
 	return (
 		<AccessContext.Provider value={{
 			auth, router, storeInfo, 
-			stage : stage, setFiled, 
-			fields, intAterContruct,
-			handleChangeKeyWord,
-			fromName, setFromName, filedData: {}, 
+			stage : stage, setFiled, setType,
+			fields, handleChangeKeyWord, filedData: {},
 			socket: initialContext?.socket,
 			hasOwnStore,
 			ownStore,
 			setOwnStore,
 			useSelector,
-			dispatch, fetchs, handleLoadMore,
+			dispatch, fetchs, handleLoadMore, handleAddRow,
 			resetFrom,
 			setFormFiled,
 			setFromConturct,

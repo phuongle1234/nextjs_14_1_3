@@ -50,14 +50,14 @@ export default function LayoutAdmin({ children, ...props }: any) {
                             <div>
                                 <h6 className="mb-0">Sidebar Colors</h6>
                             </div>
-                            <a href="javascript:void(0)" className="switch-trigger background-color">
+                            <a  className="switch-trigger background-color">
                                 <div className="badge-colors my-2 text-start">
-                                    <span className="badge filter bg-gradient-primary active" data-color="primary" ></span>
-                                    <span className="badge filter bg-gradient-dark" data-color="dark" ></span>
-                                    <span className="badge filter bg-gradient-info" data-color="info" ></span>
-                                    <span className="badge filter bg-gradient-success" data-color="success" ></span>
-                                    <span className="badge filter bg-gradient-warning" data-color="warning" ></span>
-                                    <span className="badge filter bg-gradient-danger" data-color="danger" ></span>
+                                    <span className="badge filter bg-gradient-primary active"  ></span>
+                                    <span className="badge filter bg-gradient-dark"  ></span>
+                                    <span className="badge filter bg-gradient-info"  ></span>
+                                    <span className="badge filter bg-gradient-success"  ></span>
+                                    <span className="badge filter bg-gradient-warning"  ></span>
+                                    <span className="badge filter bg-gradient-danger"  ></span>
                                 </div>
                             </a>
                             {/* Sidenav Type */}
@@ -66,9 +66,9 @@ export default function LayoutAdmin({ children, ...props }: any) {
                                 <p className="text-sm">Choose between 2 different sidenav types.</p>
                             </div>
                             <div className="d-flex">
-                                <button className="btn bg-gradient-dark px-3 mb-2 active" data-className="bg-gradient-dark" >Dark</button>
-                                <button className="btn bg-gradient-dark px-3 mb-2 ms-2" data-className="bg-transparent" >Transparent</button>
-                                <button className="btn bg-gradient-dark px-3 mb-2 ms-2" data-className="bg-white" >White</button>
+                                <button className="btn bg-gradient-dark px-3 mb-2 active"  >Dark</button>
+                                <button className="btn bg-gradient-dark px-3 mb-2 ms-2"  >Transparent</button>
+                                <button className="btn bg-gradient-dark px-3 mb-2 ms-2"  >White</button>
                             </div>
                             <p className="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
                             {/* Navbar Fixed */}

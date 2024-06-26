@@ -45,6 +45,14 @@
 }
 
 .scrollTable{
-  height: calc(100vh - 150px) !important;
+  height: calc(100vh - 170px) !important;
   overflow: scroll;
+}
+
+ol.breadcrumb{
+  padding: 5px 0px !important;
+}
+
+li.text-sm {
+  padding: 5px;
 }

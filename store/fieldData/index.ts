@@ -30,7 +30,7 @@ export const FieldSlice = createSlice({
         state.formInfo = { ...data };
         state[filed] = fields;
     },
-    clearFrom : (state) => {
+    clearFrom : (state) => {      
       Object.assign(state, initialState)
     },
     setFormData : (state, action) => {

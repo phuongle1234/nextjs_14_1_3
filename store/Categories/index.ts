@@ -1,17 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import internal from "stream";
-import { intItems, initFormInfo, Iform, Iitems, setFromContruct, setFormData, changeStage } from "@/traits/store";
+import { intItems, initFormInfo, Iform, Iitems, setFromContruct, setFormData, changeStage, clearFrom } from "@/traits/store";
+import { initMutiFormInfo, IMutiform, setMutiFromContruct } from "@/traits/store/multi_rows";
 
 
-const initialState: Iform & Iitems= {
+const initialState: Iform & Iitems & IMutiform= {
     ...intItems,
-    ...initFormInfo
+    ...initFormInfo,
+    ...initMutiFormInfo
 };
 
 const reducers: any = {
+    clearFrom,
     changeStage,
     setFromContruct,
     setFormData,
+    setMutiFromContruct,
     setAttributes: (stage: any, action: any) => {        
         Object.assign( stage , { attributes: action?.payload } )
     }

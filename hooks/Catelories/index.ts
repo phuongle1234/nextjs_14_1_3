@@ -14,16 +14,15 @@ import { channel } from "diagnostics_channel";
 
 export const CateloriesHook = () => {
     
-
+ 
     const { 
-            setFiled, stage, storeInfo, 
+            setFiled, stage, storeInfo, setType, fields,
             setFormFiled, dispatch, 
-            setOwnStore, router, hasOwnStore, 
+            setOwnStore, router, hasOwnStore, changeStage,
             intAterContruct, fetchs, handleChangeKeyWord, handleLoadMore 
           } = React.useContext(AccessContext) as any
     
-
-    setOwnStore("categories")
+  
     
     // const modelService = categoriesModel
     //       modelService.setDispath(dispatch)
@@ -33,29 +32,36 @@ export const CateloriesHook = () => {
                                                 page: { val: 1  },
                                                 // hasLoadMore: { val: false  },
                                               };
-
-    const { currentPage, lastPage, perPage, total, fields, items } = stage 
+    
+    const { currentPage, lastPage, perPage, total, items, filter } = stage 
     
     
     // init filed data 
     React.useEffect( () =>{
-        
+                
+        setType('filter')
+        setOwnStore("categories")
+
         setFiled(fromFiled)
-        return () => { setFiled({}), setOwnStore("") }
         
+    
     }, [] )
 
+   
+    const int = JSON.stringify( fields ) == JSON.stringify( fromFiled ) && ( Object.keys(filter).length >= 1 ) && JSON.stringify( filter )
+    
     
     React.useEffect( () =>{
         
-        if(intAterContruct)
-        {            
-            fetchs(categoriesModel)
+        if(int)
+        {
+            fetchs(categoriesModel)  
         }
-        
-    }, [intAterContruct] )
+                
+
+    }, [ int ] )
 
   
    
-    return { setFormFiled, handleChangeKeyWord,  handleLoadMore, items, fields }
+    return { setFormFiled, handleChangeKeyWord,  handleLoadMore, items, fields: filter }
 }

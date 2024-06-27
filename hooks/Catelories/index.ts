@@ -9,7 +9,7 @@ import categoriesModel from "@/model/catelories";
 import { promises } from "dns";
 import { cryptoAES } from "@/service/ensrip";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
-
+import CategoriesSlice from "@/store/Categories";
 import { channel } from "diagnostics_channel";
 
 export const CateloriesHook = () => {
@@ -41,9 +41,11 @@ export const CateloriesHook = () => {
                 
         setType('filter')
         setOwnStore("categories")
-
         setFiled(fromFiled)
         
+        return () => {            
+            dispatch( CategoriesSlice.actions.setFormData({  data: { page: 1 }, type: 'filter' }) )
+        }
     
     }, [] )
 
@@ -55,7 +57,7 @@ export const CateloriesHook = () => {
         
         if(int)
         {
-            fetchs(categoriesModel)  
+          fetchs({ modelView: categoriesModel, stage, dispatch, storeInfo })  
         }
                 
 

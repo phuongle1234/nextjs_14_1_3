@@ -7,6 +7,7 @@ import LayoutAdmin from "@/app/layout/admin";
 import { CreateCateloriesHook } from "@/hooks/Catelories/create";
 import debounce from "debounce";
 import { usePress } from "@/helper/press";
+import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 const Child = ({ ...props }: any) => {
     
@@ -15,6 +16,11 @@ const Child = ({ ...props }: any) => {
     const [ subTag, setSubTag ]: any = React.useState <any> ([])
 
     usePress( { KeyDown: handleSubmit } )
+
+    const check = (e:any) => {
+        console.log( { e } );
+        
+    }
 
     return (
         <>
@@ -82,8 +88,7 @@ const Child = ({ ...props }: any) => {
                         </div>
                     </div>
                 </div>
-            </div>
-           
+            </div>                
         </>
     )
 }

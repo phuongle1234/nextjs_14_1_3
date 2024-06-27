@@ -15,7 +15,7 @@ export const CreateCateloriesHook = () => {
 
     const { 
             setFiled, stage, storeInfo, setType, handleDeleteRow, useSelector,
-            dispatch, setOwnStore, router, setFormFiled, handleAddRow
+            dispatch, setOwnStore, router, setFormFiled, handleAddRow, checkValidMutiRow
           } = React.useContext(AccessContext) as any
     
     const modelSevice = categoriesModel
@@ -47,24 +47,31 @@ export const CreateCateloriesHook = () => {
     const handleSubmit = async (e :any) => {
 
         try {
-           
+        
+        if( ! checkValidMutiRow(mutiFields) )
+        {
+            alert("The data is not eligible to save, please check again")
+            return false
+        }
+          
+            
         if( ! confirm("Do you want to update the data?") )
-            throw("comfrim cancel")
+            return false
         
 
-        //    const res = await modelSevice.create(
-        //                     mutiFields.map((res:any) => {
-        //                         const item: any = { ...res }
-        //                         delete item?.error
+        const res = await modelSevice.create(
+                        mutiFields.map((res:any) => {
+                            const item: any = { ...res }
+                            delete item?.error
 
-        //                         if( !item?.parent_id )
-        //                         delete item?.parent_id
+                            if( !item?.parent_id )
+                            delete item?.parent_id
 
-        //                         return item
-        //                     })
-        //                 )
+                            return item
+                        })
+                    )
 
-           console.log( "ok !" );
+        router.push(`/adminOffice/catelories`)
            
                 
         } catch (err: any) {

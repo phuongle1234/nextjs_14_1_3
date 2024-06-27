@@ -16,15 +16,14 @@ export const AuthencationHook = () => {
     
 
     const {
-            setFiled, stage, hasOwnStore, storeInfo,
+            setFiled, stage, hasOwnStore, storeInfo, setType,
             setFromConturct, setFormFiled, filedData, fields, 
             resetFrom, dispatch, ownStore, setOwnStore, router
 
           } = React.useContext(AccessContext) as any
     
     // define store
-    setOwnStore("auth")
-    
+   
     const Auth = AuthModelView
           Auth.setDispath(dispatch)
     
@@ -48,7 +47,10 @@ export const AuthencationHook = () => {
     // init filed data 
     React.useEffect( () =>{
         
+        setType("fields")
+        setOwnStore("auth")
         setFiled(fromFiled)
+
         return () => { setFiled({}), setOwnStore("") }
         
     }, [] )

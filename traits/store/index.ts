@@ -37,7 +37,8 @@ export const setFromContruct = (state: any, action: any ) => {
   
   switch(filed)
   {
-    case 'fileds':
+
+    case 'fields':
       state.validate = {};
     case 'filter':
       state[filed as string] = { ...data }; break;
@@ -59,7 +60,8 @@ export const setFormData = (state: any, action: any ) => {
 
   switch(type)
   {
-    case "fields":  Object.assign( state.fields, data ); break;
+    case "fields": 
+     Object.assign( state.fields, data ); break;
     case "filter":  Object.assign( state.filter, data ); break;
   }
   

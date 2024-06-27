@@ -1,7 +1,6 @@
 import React from "react";
 import { setFormData, setFromContruct } from "@/store/fieldData";
 import Router from "next/router";
-import { useSelector, useDispatch } from "react-redux";
 import { from } from "@/enum/form";
 import Joi from "Joi"
 import  { AccessContext } from "@/provide/access";
@@ -9,18 +8,18 @@ import categoriesModel from "@/model/catelories";
 import { promises } from "dns";
 import { cryptoAES } from "@/service/ensrip";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
-
 import { channel } from "diagnostics_channel";
 
 export const CreateCateloriesHook = () => {
     
 
     const { 
-            setFiled, stage, storeInfo, setType,
+            setFiled, stage, storeInfo, setType, handleDeleteRow, useSelector,
             dispatch, setOwnStore, router, setFormFiled, handleAddRow
           } = React.useContext(AccessContext) as any
     
-    
+    const modelSevice = categoriesModel
+          modelSevice.setDispath(dispatch)
     
     let fromFiled:  { [key: string] : any } = {
                                                 name: { val: '', Joi: Joi.string().required() },
@@ -45,7 +44,36 @@ export const CreateCateloriesHook = () => {
 
     }, [] )
 
+    const handleSubmit = async (e :any) => {
+
+        try {
+           
+        if( ! confirm("Do you want to update the data?") )
+            throw("comfrim cancel")
+        
+
+        //    const res = await modelSevice.create(
+        //                     mutiFields.map((res:any) => {
+        //                         const item: any = { ...res }
+        //                         delete item?.error
+
+        //                         if( !item?.parent_id )
+        //                         delete item?.parent_id
+
+        //                         return item
+        //                     })
+        //                 )
+
+           console.log( "ok !" );
+           
+                
+        } catch (err: any) {
+            console.log({ err } );
+            
+        }
+
+    }
     
 
-    return { items: mutiFields, setFormFiled, handleAddRow }
+    return { items: mutiFields, setFormFiled, handleAddRow, handleDeleteRow, handleSubmit }
 }

@@ -48,7 +48,7 @@ export default function AccessProvide({ children, ...props }: any) {
 
 	const [fields, setFiled]: any = React.useState({})
 
-	const [ type, setType]: any = React.useState <'filter' | 'fileds' | 'mutiFields' > ( 'filter' )
+	const [ type, setType]: any = React.useState <'filter' | 'fields' | 'mutiFields' > ( 'fields' )
 
 	const [ownStore, setOwnStore]: any = React.useState<string>("")
 
@@ -143,7 +143,7 @@ export default function AccessProvide({ children, ...props }: any) {
 		// 'filter' | 'fileds' | 'mutiFields
 		switch(type)
 		{
-			case "fileds":
+			case "fields":
 				dispatch(storeInfo?.module?.setFormData({ data, error, type })); break;
 			case "mutiFields":
 				const index = event.target.getAttribute("data-index")
@@ -206,21 +206,36 @@ export default function AccessProvide({ children, ...props }: any) {
 		setFormFiled(e) 
 	}, 800 )
 
-	const checkValid = stage?.mutiFields.find( (cur: any, acc: any) => {
-		
-						if(acc?.error?.length)
-							return true
-		
-						const check = acc?.error?.filter( (res:any) => res!= "" )
-						console.log( { check } );
-						
-						})
+	const checkValidMutiRow = (fields: any)=> (
+		! Object.keys(
+			fields?.find( (cur: any, acc: any) => {
 
-	const handleAddRow = (e:any) => {	
-		console.log( { checkValid } );
-					
-		dispatch(storeInfo?.module?.changeStage({ mutiFields: [ ...stage?.mutiFields, { ...mapValueFileds } ] }) ); 
-    }
+				const _row = fields[acc as number]
+
+				if(!_row?.error)
+					return true
+				
+				return Object.keys(_row?.error)?.filter( (res:any) => _row?.error[res as string]!= undefined )?.length
+				
+				}) || {}
+		)?.length
+	)
+
+	const handleAddRow = (e:any) => 
+		(
+			checkValidMutiRow(stage?.mutiFields) && dispatch(storeInfo?.module?.changeStage({ mutiFields: [ ...stage?.mutiFields, { ...mapValueFileds } ] }) )
+		)
+	
+	const handleDeleteRow = (e:any) => 
+		{
+			const index = Number( e.target.getAttribute("data-index") || 0 )
+
+			const data = stage?.mutiFields.filter( (res:any, ind: number) => ind != index )
+			
+			if(data?.length)
+			dispatch(storeInfo?.module?.changeStage({ mutiFields: [ ...data ] }) )
+		}
+    
 
 	return (
 		<AccessContext.Provider value={{
@@ -232,7 +247,7 @@ export default function AccessProvide({ children, ...props }: any) {
 			ownStore,
 			setOwnStore,
 			useSelector,
-			dispatch, fetchs, handleLoadMore, handleAddRow,
+			dispatch, fetchs, handleLoadMore, handleAddRow, handleDeleteRow,
 			resetFrom,
 			setFormFiled,
 			setFromConturct,

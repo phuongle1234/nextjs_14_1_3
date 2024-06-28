@@ -56,3 +56,19 @@ ol.breadcrumb{
 li.text-sm {
   padding: 5px;
 }
+
+div.conent-main{
+  position: relative;
+  .context-menu{
+    position: absolute;
+    z-index: 10;
+
+    .list-group{
+      color: #fff;
+      cursor: pointer;
+      button.btn{
+          margin: 0px;
+      }
+    }
+  }
+}

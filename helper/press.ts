@@ -1,8 +1,10 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux";
 
-export const usePress = ( { KeyDown = (e:any) => { } } ) => {
+export const usePress = ( handle : { handleSubmit: Function, handleInsert: Function, handleDelete: Function } ) => {
     
+    const { handleSubmit, handleInsert, handleDelete } = handle
+
     const process = ! ( useSelector( (stage:any) => stage?.global )?.isLoading )
 
     React.useEffect(() => {
@@ -11,15 +13,31 @@ export const usePress = ( { KeyDown = (e:any) => { } } ) => {
         const code = event.which || event.keyCode;
         
         let charCode = String.fromCharCode(code).toLowerCase();
-
+        
         if ((event.ctrlKey || event.metaKey) && charCode === 's' && process) {
-            console.log( { process } );
             
             event.preventDefault();
-            KeyDown(event)
+            handleSubmit(event)
             return true;
         } 
+
+        if ((event.ctrlKey || event.metaKey) && charCode === '½' && process) {
+            
+          event.preventDefault();
+          handleDelete(event)
+          return true;
+      }
         
+        if ((event.shiftKey) &&  (event.ctrlKey || event.metaKey) && charCode === '»' && process) {
+            
+          event.preventDefault();
+          handleInsert(event)
+          //KeyDown(event)
+          return true;
+        } 
+
+        // shiftKey  keyCode : 187
+
         // else if ((event.ctrlKey || event.metaKey) && charCode === 'c') {
         //   setState('CTRL+C');
         //   alert('CTRL+C Pressed');
@@ -32,6 +50,6 @@ export const usePress = ( { KeyDown = (e:any) => { } } ) => {
       window.addEventListener('keydown', handleKeyDown);
   
       return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [KeyDown]);
+    }, [handle]);
 
 }

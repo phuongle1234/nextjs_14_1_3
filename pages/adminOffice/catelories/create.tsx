@@ -17,6 +17,35 @@ const Child = ({ ...props }: any) => {
         
     const [ subTag, setSubTag ]: any = React.useState <any> ([])
 
+    const handleChangeFocusByKeys = (e:any) => {
+        
+        const input: any = document.querySelectorAll('input.form-control')
+        
+        // if( !['INPUT', 'SELECT'].includes(e.target.nodeName as string) )
+        //     e = { ...e, target: input[0] }
+        
+        const lengRow = e.target?.parentNode?.parentNode?.parentNode?.querySelectorAll('input.form-control')?.length || 2
+
+        const index: any = Array.prototype.indexOf.call(input, e.target ) || 0
+
+        const switchInd = (() => {
+                                switch(e.keyCode)
+                                {
+                                    case 37: return index -1
+                                    case 39: return index + 1
+                                    case 38: return index - lengRow
+                                    case 40: return index + lengRow
+                                }
+                            })()
+
+        if( !( switchInd >= 0 && switchInd <=  (input.length - 1) ) )
+         return false
+
+        
+        return input[switchInd].focus()                    
+        
+    } 
+
     usePress( { handleSubmit,
                 handleInsert: handleAddRow,
                 handleDelete: (e:any) => { 
@@ -25,36 +54,10 @@ const Child = ({ ...props }: any) => {
                     if( !['INPUT', 'SELECT'].includes( activeDom?.nodeName as string ) )
                         return false;
 
+                    handleChangeFocusByKeys( { target: e.target, keyCode: 38 } )
                     handleDeleteRow({ target: activeDom })
-                    //console.log({ activeDom, name: activeDom?.target }); 
                 },
-                handleChangeFocus: (e:any) => {
-                    const input: any = document.querySelectorAll('input.form-control')
-                    
-                    // if( !['INPUT', 'SELECT'].includes(e.target.nodeName as string) )
-                    //     e = { ...e, target: input[0] }
-                    
-                    const lengRow = e.target?.parentNode?.parentNode?.parentNode?.querySelectorAll('input.form-control')?.length || 2
-
-                    const index: any = Array.prototype.indexOf.call(input, e.target ) || 0
-
-                    const switchInd = (() => {
-                                            switch(e.keyCode)
-                                            {
-                                                case 37: return index -1
-                                                case 39: return index + 1
-                                                case 38: return index - lengRow
-                                                case 40: return index + lengRow
-                                            }
-                                        })()
-
-                    if( !( switchInd >= 0 && switchInd <=  (input.length - 1) ) )
-                     return false
-
-                    
-                    return input[switchInd].focus()                    
-                    
-                } 
+                handleChangeFocus: handleChangeFocusByKeys
     } )
 
     const [ contextInfor, setContex ]: any = React.useState <object> ( { } )

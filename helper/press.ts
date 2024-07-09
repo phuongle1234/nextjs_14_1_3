@@ -1,9 +1,9 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux";
 
-export const usePress = ( handle : { handleSubmit: Function, handleInsert: Function, handleDelete: Function } ) => {
+export const usePress = ( handle : { handleSubmit: Function, handleInsert: Function, handleDelete: Function, handleChangeFocus :  Function } ) => {
     
-    const { handleSubmit, handleInsert, handleDelete } = handle
+    const { handleSubmit, handleInsert, handleDelete, handleChangeFocus } = handle
 
     const process = ! ( useSelector( (stage:any) => stage?.global )?.isLoading )
 
@@ -35,16 +35,14 @@ export const usePress = ( handle : { handleSubmit: Function, handleInsert: Funct
           //KeyDown(event)
           return true;
         } 
-
-        // shiftKey  keyCode : 187
-
-        // else if ((event.ctrlKey || event.metaKey) && charCode === 'c') {
-        //   setState('CTRL+C');
-        //   alert('CTRL+C Pressed');
-        // } else if ((event.ctrlKey || event.metaKey) && charCode === 'v') {
-        //   setState('CTRL+V');
-        //   alert('CTRL+V Pressed');
-        // }
+        
+        if( ( event.keyCode >= 37 && event.keyCode <= 40 ) )
+        {
+          event.preventDefault();
+          handleChangeFocus(event);
+          return true;
+        }
+        
       };
   
       window.addEventListener('keydown', handleKeyDown);

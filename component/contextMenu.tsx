@@ -28,7 +28,7 @@ export const MenuContext = ({ ...props }: any) => {
                                 <path data-index={contextInfor?.index} d="M11 11.5a.5.5 0 0 1 .5-.5h4a.5.5 0 1 1 0 1h-4a.5.5 0 0 1-.5-.5" />
                             </svg>
                             &nbsp; &nbsp;
-                            delete item
+                            delete item <small>(Ctrl Shift -)</small>
                         </button>
                     </li>
                     <li className="list-group-item list-group-item-action bg-gradient-dark">

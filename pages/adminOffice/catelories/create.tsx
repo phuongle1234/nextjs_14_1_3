@@ -25,8 +25,36 @@ const Child = ({ ...props }: any) => {
                     if( !['INPUT', 'SELECT'].includes( activeDom?.nodeName as string ) )
                         return false;
 
-                    console.log({ activeDom, name: activeDom?.target }); 
-                }, 
+                    handleDeleteRow({ target: activeDom })
+                    //console.log({ activeDom, name: activeDom?.target }); 
+                },
+                handleChangeFocus: (e:any) => {
+                    const input: any = document.querySelectorAll('input.form-control')
+                    
+                    // if( !['INPUT', 'SELECT'].includes(e.target.nodeName as string) )
+                    //     e = { ...e, target: input[0] }
+                    
+                    const lengRow = e.target?.parentNode?.parentNode?.parentNode?.querySelectorAll('input.form-control')?.length || 2
+
+                    const index: any = Array.prototype.indexOf.call(input, e.target ) || 0
+
+                    const switchInd = (() => {
+                                            switch(e.keyCode)
+                                            {
+                                                case 37: return index -1
+                                                case 39: return index + 1
+                                                case 38: return index - lengRow
+                                                case 40: return index + lengRow
+                                            }
+                                        })()
+
+                    if( !( switchInd >= 0 && switchInd <=  (input.length - 1) ) )
+                     return false
+
+                    
+                    return input[switchInd].focus()                    
+                    
+                } 
     } )
 
     const [ contextInfor, setContex ]: any = React.useState <object> ( { } )

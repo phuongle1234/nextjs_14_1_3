@@ -125,6 +125,7 @@ export default function AccessProvide({ children, ...props }: any) {
 							), 
 			handleDeleteRow: (e:any) => 
 							{
+
 								const index = Number( e.target.getAttribute("data-index") || 0 )
 						
 								const data = stage?.mutiFields.filter( (res:any, ind: number) => ind != index )

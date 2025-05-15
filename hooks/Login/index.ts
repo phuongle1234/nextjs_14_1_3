@@ -29,12 +29,15 @@ export const AuthencationHook = () => {
     
     let localStore: any = {}
 
+    // 02
     if( typeof window == "object" )
     {
         localStore = localStorage.getItem("auth")
         localStore = localStore ? JSON.parse( localStore ) : {}
     }
 
+    // TEST 11456
+    
     let fromFiled:  { [key: string] : any } = {
                                                 email: { val: localStore?.email || "", type: 'text', Joi: Joi.string().email({ minDomainSegments: 2, tlds: { allow: false   } }).required() },
                                                 password: { val: "", type: 'text', Joi: Joi.string().min(5).required()  },

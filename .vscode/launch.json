@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Next.js Debug",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "C:/xampp_v2/htdocs/nextjs_14_1_3/node_modules/.bin/next",
+            "args": ["dev"],
+            "runtimeExecutable": "node",
+            "env": {
+              "NODE_ENV": "development"
+            }
+          }
+    ]
+}
